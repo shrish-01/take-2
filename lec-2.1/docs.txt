@@ -1,0 +1,25 @@
+Kubernetes provides a standardized way of achieving high availability, disaster recovery, and scalability.
+
+Redpanda in Kubernetes
+Learn about Redpanda in Kubernetes and the tools that are available.
+
+Production Deployment Workflow for Kubernetes
+Learn how to deploy Redpanda in Kubernetes for production.
+
+Kubernetes Cluster Requirements and Recommendations
+A list of requirements and recommendations for provisioning Kubernetes clusters and worker nodes for running Redpanda in production.
+
+Tune Kubernetes Worker Nodes for Production
+To get the best performance from your hardware, set Redpanda to production mode and run the autotuner tool. The autotuner identifies your hardware configuration and tunes itself to give you the best performance.
+
+Deploy Redpanda for Production in Kubernetes
+Deploy a Redpanda cluster in Kubernetes.
+
+Deploy Redpanda Connectors in Kubernetes
+Learn how to deploy and configure Redpanda Connectors using Helm. Redpanda Connectors is a package that includes Kafka Connect and built-in connectors that you can create and configure in Redpanda Console.
+
+High Availability in Kubernetes
+Explore high availability configurations of Redpanda in Kubernetes.
+
+Get Started with Redpanda in Kubernetes
+Find guides for setting up a three-broker Redpanda cluster in different Kubernetes platforms.
