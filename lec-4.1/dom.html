@@ -51,6 +51,23 @@
 
             // document.getElementById("finalSum").innerHTML = parseInt(num1) + parseInt(num2);
         }
+        /* Assignment: Debounce the populateDiv function
+            -- the populateDiv() need to call the deboundedPopulateDiv() if the user does not input anything for 100ms - for example - scope of the assignment.
+            -- if the deboundedPopulateDiv() is called once, then the request won't be sent for another 100ms.
+        */
+        let debouncedTimeout;
+        function deboundedPopulateDiv() {
+            // delay the call to populateDiv until I've not been called for 100ms
+            // and I've been called atleast once.
+            clearTimeout(debouncedTimeout);
+
+            debouncedTimeout = setTimeout(function() {
+                populateDiv(); 
+            }, 100);
+
+            // this is fine, but the issue here is, what if the function gets called again, before 100ms are completed -- expected behaviour, is that the clock is reset.
+
+        }
 
         function populateInterest() {
             const principal = document.getElementById("principal").value;
@@ -71,17 +88,17 @@
     </script>
 </head>
 <body>
-    <!-- <input type="text" name="" id="num1"> <br/>
-    <input type="text" name="" id="num2"><br/>
-    <button onclick="populateDiv()" type="submit">Submit</button><br/>
-    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="finalSum">Hello World</div> -->
+    <input oninput="deboundedPopulateDiv()" type="text" name="" id="num1"> <br/>
+    <input oninput="deboundedPopulateDiv()" type="text" name="" id="num2"><br/>
+    <!-- <button onclick="populateDiv()" type="submit">Submit</button><br/> -->
+    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="finalSum">Output Box</div>
 
-    <input type="text" name="" id="principal" placeholder="principal"> <br/>
+    <!-- <input type="text" name="" id="principal" placeholder="principal"> <br/>
     <input type="text" name="" id="rate" placeholder="rate"><br/>
     <input type="text" name="" id="time" placeholder="time"><br/>
     <button onclick="populateInterest()" type="submit">Submit</button><br/>
     <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="output1">Output Box 1</div>
-    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="output2">Output Box 2</div>
+    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="output2">Output Box 2</div> -->
 
     <!-- <div class="container" id="bordered-div">Hi there 1</div>
     <div class="container">Hi there 2</div>
