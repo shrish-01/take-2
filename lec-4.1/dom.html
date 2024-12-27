@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning DOM</title>
+    <style>
+        .container {
+            background-color: yellow;
+            font-size: 10px;
+            padding: 10px;
+            margin: 10px;
+            width: 100%;
+            color: black;
+        }
+        #bordered-div {
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        async function populateDiv() {
+            const num1 = document.getElementById("num1").value;
+            const num2 = document.getElementById("num2").value;
+
+            // const a = 2, b = 3;
+
+            fetch("http://localhost:3001/sum?a=" + num1 + "&b=" + num2)
+                .then((response) => {
+                    /**
+                     * Long Form
+                    */
+                    // const jsonified = response.json();
+                    // return jsonified;
+
+                    /**
+                     * Short Form
+                    */
+                   response.text().then((jsonified) => {
+                    // console.log(jsonified);
+                    document.getElementById("finalSum").innerHTML = jsonified;
+                   })
+                })
+                // .then((jsonified) => {
+                //     // console.log(jsonified);
+                //     document.getElementById("finalSum").innerHTML = jsonified;
+                // });
+
+            // const data = await fetch("http://localhost:3001/sum?a=1&b=2");
+            // const jsonData = await data.json();
+            // document.getElementById("finalSum").innerHTML = jsonData;
+
+            // document.getElementById("finalSum").innerHTML = parseInt(num1) + parseInt(num2);
+        }
+
+        function populateInterest() {
+            const principal = document.getElementById("principal").value;
+            const rate = document.getElementById("rate").value;
+            const time = document.getElementById("time").value;
+
+            fetch("http://localhost:3001/interest?principal=" + principal + "&rate=" + rate + "&time=" + time)
+                .then((response) => {
+                    response.json()
+                        .then((jsonified) => {
+                            document.getElementById("output1").innerHTML = "total = " + jsonified.total;
+                            document.getElementById("output2").innerHTML = "interest = " + jsonified.interest;
+                            // console.log(jsonified.total, jsonified.interest);
+                        });
+                });
+            // console.log(principal, rate, time);
+        }
+    </script>
+</head>
+<body>
+    <!-- <input type="text" name="" id="num1"> <br/>
+    <input type="text" name="" id="num2"><br/>
+    <button onclick="populateDiv()" type="submit">Submit</button><br/>
+    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="finalSum">Hello World</div> -->
+
+    <input type="text" name="" id="principal" placeholder="principal"> <br/>
+    <input type="text" name="" id="rate" placeholder="rate"><br/>
+    <input type="text" name="" id="time" placeholder="time"><br/>
+    <button onclick="populateInterest()" type="submit">Submit</button><br/>
+    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="output1">Output Box 1</div>
+    <div style="height: 16px; background-color: yellow; border: 1px solid black; color: black;" id="output2">Output Box 2</div>
+
+    <!-- <div class="container" id="bordered-div">Hi there 1</div>
+    <div class="container">Hi there 2</div>
+    <div class="container">Hi there 3</div> -->
+</body>
+</html>
