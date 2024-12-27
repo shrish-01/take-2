@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .todo-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+        .todo-item:hover {
+            background-color: #e0f7fa;
+        }
+    </style>
+    <script>
+        function addTodo() {
+            const task = document.getElementById("task").value;
+            const description = document.getElementById("description").value;
+            // console.log(task, description);
+
+            if (!task || !description) {
+                alert("Please fill in both fields!");
+                return;
+            }
+
+            const todoDiv = document.createElement("div");
+            todoDiv.className = "todo-item";
+            const parentDiv = document.getElementById("todo-lists");
+            parentDiv.appendChild(todoDiv);
+
+            todoDiv.innerHTML = `<h4>${task}</h4> <p>${description}</p>`;
+            
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete Task";
+            deleteBtn.onclick = function () {
+                parentDiv.removeChild(todoDiv);
+            };
+
+            todoDiv.appendChild(deleteBtn);
+
+            let flag = true;
+            todoDiv.onclick = function() {
+                if(flag) {
+                    todoDiv.style.textDecoration = "line-through"
+                } else {
+                    todoDiv.style.textDecoration = "none";
+                }
+                flag = !flag;
+            }
+
+            const hrTag = document.createElement("hr");
+            parentDiv.appendChild(hrTag);
+
+            document.getElementById("task").value = "";
+            document.getElementById("description").value = "";
+        }
+    </script>
+</head>
+<body>
+    <input type="text" name="" id="task" placeholder="task"> </br>
+    <input type="text" name="" id="description" placeholder="description"> </br>
+    <button onclick="addTodo()">Add todo</button>
+
+    <div id="todo-lists">
+        <!-- Todo Items to go here! -->
+    </div>
+</body>
+</html>
