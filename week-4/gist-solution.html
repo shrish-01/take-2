@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+</head>
+<body>
+    <input type="text" id="title"> <br>
+    <input type="text" id="description"> <br>
+    <!-- <button onclick="handleTodo()">Add Todo</button> -->
+    <div id="todo-list"></div>
+
     <script>
         let globalId = 1;
         let flag = false;
 
-        function handleMarkDone(id) {
-            const parent = document.getElementById(id);
-            if(!flag) {
-                parent.children[2].innerHTML = "Done!"
-            } else {
-                parent.children[2].innerHTML = "Mark as done!"
-            }
-            flag = !flag;
-            // const divToRemove = document.getElementById(id);
-            // parent.removeChild(divToRemove);
-        }
+        // function handleMarkDone(id) {
+        //     const parent = document.getElementById(id);
+        //     if(!flag) {
+        //         parent.children[2].innerHTML = "Done!"
+        //     } else {
+        //         parent.children[2].innerHTML = "Mark as done!"
+        //     }
+        //     flag = !flag;
+        //     // const divToRemove = document.getElementById(id);
+        //     // parent.removeChild(divToRemove);
+        // }
 
         function createChild(title, description, id) {
             const todoDiv = document.createElement("div");
@@ -30,16 +37,48 @@
             const descriptionDiv = document.createElement("div");
             descriptionDiv.innerHTML = description;
 
-            const markDoneBtn = document.createElement("button");
-            markDoneBtn.textContent = "Mark As Done!";
-            markDoneBtn.setAttribute("onclick", `handleMarkDone(${id})`);
+            const hrTag = document.createElement("hr");
+
+            // const markDoneBtn = document.createElement("button");
+            // markDoneBtn.textContent = "Mark As Done!";
+            // markDoneBtn.setAttribute("onclick", `handleMarkDone(${id})`);
 
             todoDiv.appendChild(titleDiv);
             todoDiv.appendChild(descriptionDiv);
-            todoDiv.appendChild(markDoneBtn);
+            // todoDiv.appendChild(markDoneBtn);
+            todoDiv.appendChild(hrTag);
 
             return todoDiv;
         }
+
+        function updateDomAccToState(state) {
+            // alert("I am called!");
+            console.log(state);
+            const parent = document.getElementById("todo-list");
+            parent.innerHTML = "";
+            for(let i = 0; i < state.length; i++) {
+                const child = createChild(state[i].title, state[i].description, state[i].id);
+                parent.appendChild(child);
+            }
+        }
+
+        // updateDomAccToState([
+        //     {
+        //         title: "title1",
+        //         description: "description1",
+        //         id: "1",
+        //     },
+        //     {
+        //         title: "title2",
+        //         description: "ye change kiya maine",
+        //         id: "2",
+        //     },
+        //     {
+        //         title: "title3",
+        //         description: "description3",
+        //         id: "3",
+        //     },
+        // ])
 
         function handleTodo() {
             const title = document.getElementById("title").value;
@@ -48,12 +87,13 @@
 
             parent.appendChild(createChild(title, description, globalId++));
         }
+
+        window.setInterval(async function() {
+            const response = await fetch("http://localhost:3001/todos");
+            const jsonTodos = await response.json();
+            updateDomAccToState(jsonTodos.todos);
+        }, 5000);
     </script>
-</head>
-<body>
-    <input type="text" id="title"> <br>
-    <input type="text" id="description"> <br>
-    <button onclick="handleTodo()">Add Todo</button>
-    <div id="todo-list"></div>
+
 </body>
 </html>
