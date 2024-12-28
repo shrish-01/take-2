@@ -6,11 +6,18 @@
     <title>Document</title>
     <script>
         let globalId = 1;
+        let flag = false;
 
         function handleMarkDone(id) {
-            const parent = document.getElementById("todo-list");
-            const divToRemove = document.getElementById(id);
-            parent.removeChild(divToRemove);
+            const parent = document.getElementById(id);
+            if(!flag) {
+                parent.children[2].innerHTML = "Done!"
+            } else {
+                parent.children[2].innerHTML = "Mark as done!"
+            }
+            flag = !flag;
+            // const divToRemove = document.getElementById(id);
+            // parent.removeChild(divToRemove);
         }
 
         function createChild(title, description, id) {
