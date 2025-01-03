@@ -69,8 +69,36 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
     }
 });
 
-router.get('/purchasedCourses', userMiddleware, (req, res) => {
+router.get('/purchasedCourses', userMiddleware, async (req, res) => {
     // Implement fetching purchased courses logic
+    try {
+        let userCourses = [];
+        const { username, password } = req.headers;
+        const registeredUser = await User.findOne({
+            username, password
+        });
+    
+        for(let i = 0; i < registeredUser.purchasedCourses.length; i++) {
+            const course = await Course.findById(registeredUser.purchasedCourses[i]);
+            if(course) {
+                userCourses.push(course);
+            }
+        }
+
+        // Promise.all -- slighly harder syntax
+        // const userCourses = await Promise.all(
+        //     registeredUser.purchasedCourses.map(courseId => Course.findById(courseId))
+        // );
+    
+        res.status(200).json({
+            purchasedCourses: userCourses,
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: "An error occured while fetching purchased course",
+            error: error.message
+        });
+    }
 });
 
 module.exports = router
