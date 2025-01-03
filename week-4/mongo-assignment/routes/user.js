@@ -45,8 +45,28 @@ router.get('/courses', async (req, res) => {
     });
 });
 
-router.post('/courses/:courseId', userMiddleware, (req, res) => {
+router.post('/courses/:courseId', userMiddleware, async (req, res) => {
     // Implement course purchase logic
+    try {
+        const { username } = req.headers;
+        console.log(username);
+        const registeredUser = await User.findOne({
+            username: username,
+        });
+        const { courseId } = req.params;
+        console.log(courseId);
+        registeredUser.purchasedCourses.push(courseId);
+        await registeredUser.save();
+    
+        res.status(200).json({
+            msg: "Course purchased sucessfully!"
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: "An error occurred while purchasing the course",
+            error: error.message
+        });
+    }
 });
 
 router.get('/purchasedCourses', userMiddleware, (req, res) => {
