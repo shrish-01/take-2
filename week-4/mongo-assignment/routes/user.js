@@ -49,12 +49,12 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
     // Implement course purchase logic
     try {
         const { username } = req.headers;
-        console.log(username);
+        // console.log(username);
         const registeredUser = await User.findOne({
             username: username,
         });
         const { courseId } = req.params;
-        console.log(courseId);
+        // console.log(courseId);
         registeredUser.purchasedCourses.push(courseId);
         await registeredUser.save();
     
