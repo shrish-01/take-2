@@ -1,22 +1,115 @@
 const { Router } = require("express");
 const adminMiddleware = require("../middleware/admin");
+const { Admin, Course, User } = require("../db/index");
+const jwt = require("jsonwebtoken");
 const router = Router();
 
 // Admin Routes
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
     // Implement admin signup logic
+    const { username, password } = req.body;
+
+    try {
+        const userExists = await Admin.findOne({
+            username
+        });
+    
+        if(userExists) {
+            res.status(409).json({
+                msg: "Admin already exists!"
+            });
+            return;
+        }
+    
+        const newAdmin = new Admin({
+            username: username,
+            password: password
+        });
+    
+        const savedAdmin = await newAdmin.save();
+        res.status(200).json({
+            msg: "Admin created & saved!",
+            id: savedAdmin._id,
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: "Something went wrong!", error: error.message
+        });
+    }
 });
 
-router.post('/signin', (req, res) => {
+router.post('/signin', async (req, res) => {
     // Implement admin signup logic
+    const { username, password } = req.body;
+
+    try {
+        const userExists = await Admin.findOne({
+            username, password
+        });
+        console.log(userExists);
+
+        if(!userExists) {
+            return res.status(404).json({
+                msg: "Admin not found!",
+            });
+        }
+
+        const token = jwt.sign(userExists.username, "secret_password_hehe");
+        console.log(token);
+
+        res.status(200).json({
+            msg: "Admin signed in successfully!",
+            token: `Bearer ${token}`,  // Send token to client
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: "Something went wrong!", error: error.message
+        });
+    } finally {
+        res.end();
+    }
 });
 
-router.post('/courses', adminMiddleware, (req, res) => {
+router.post('/courses', adminMiddleware, async (req, res) => {
     // Implement course creation logic
+    const { username } = req.headers;
+    const { title, description, price, imageLink } = req.body;
+
+    try {
+        const admin = await Admin.findOne({ username });
+    
+        const newCourse = new Course({
+            title, description, price, imageLink, owner: admin._id
+        });
+    
+        const createdNewCourse = await newCourse.save();
+        // await Admin.updateOne({
+        //     id: admin._id
+        // }, {
+        //     myCourse: createdNewCourse._id,
+        // });
+
+        admin.myCourses.push(createdNewCourse._id);
+        await admin.save();
+    
+        res.status(201).json({
+            msg: "Course created successfully",
+            course: createdNewCourse,
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: "An error occurred while creating the course",
+            error: error.message,
+        });
+    }
 });
 
-router.get('/courses', adminMiddleware, (req, res) => {
+router.get('/courses', adminMiddleware, async (req, res) => {
     // Implement fetching all courses logic
+    const courses = await Course.find();
+    res.status(200).json({
+        courses,
+    });
 });
 
 module.exports = router;
