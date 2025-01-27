@@ -39,6 +39,34 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signin', async (req, res) => {
     // Implement admin signup logic
+    const { username, password } = req.body;
+
+    try {
+        const userExists = await User.findOne({
+            username, password
+        });
+        console.log(userExists);
+
+        if(!userExists) {
+            return res.status(404).json({
+                msg: "User not found!",
+            });
+        }
+
+        const token = jwt.sign(userExists.username, "secret_password_hehe");
+        console.log(token);
+
+        res.status(200).json({
+            msg: "User signed in successfully!",
+            token: `Bearer ${token}`,  // Send token to client
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: "Something went wrong!", error: error.message
+        });
+    } finally {
+        res.end();
+    }
 });
 
 router.get('/courses', async (req, res) => {
