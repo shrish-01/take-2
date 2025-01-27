@@ -61,23 +61,25 @@ function App() {
     // </div>
 
     <div>
-      <CardWrapper innerComponet={<TextComponent />} />
+      <CardWrapper>
+        <i>This content is given in the card wrapper!</i>
+      </CardWrapper>
     </div>
   )
 }
 
-function TextComponent() {
+function CardWrapper({children}) {
   return (
-    <div>Hello There!</div>
-  )
-}
-
-function CardWrapper({innerComponet}) {
-  return (
-    <div style={{border: '2px solid black'}}>
-      {innerComponet}
+    <div style={{border: '2px solid black', padding: '10px'}}>
+      {children}
     </div>
   )
 }
+
+// function TextComponent() {
+//   return (
+//     <div>Hello There!</div>
+//   )
+// }
 
 export default App
