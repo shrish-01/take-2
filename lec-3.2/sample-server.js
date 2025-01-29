@@ -46,6 +46,16 @@ const todos = [{
     })
   });
 
+app.get("/todos/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const todo = todos.find((todo) => todo.id === id);
+  if (todo) {
+    res.json(todo);
+  } else {
+    res.status(404).send("Todo not found");
+  }
+})
+
 app.get('/sum', (req, res) => {
     const a = parseInt(req.query.a);
     const b = parseInt(req.query.b);
