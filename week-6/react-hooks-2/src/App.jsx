@@ -3,26 +3,30 @@ import axios from "axios";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import useTodos from './custom-hooks/useTodos';
 
 function App() {
 
+  // using custom hooks:
+  const todos = useTodos();
+  
   // const [todos, setTodos] = useState([]);
   // const [todoId, setTodoId] = useState(1);
   // const [currentTodoBtn, setCurrentTodoBtn] = useState(1);
-  const [count, setCount] = useState(0);
-  const [input, setInput] = useState();
+  // const [count, setCount] = useState(0);
+  // const [input, setInput] = useState();
 
-  function handleOnClick() {
-    setCount(count + 1);
-  }
+  // function handleOnClick() {
+  //   setCount(count + 1);
+  // }
 
-  let solution = useMemo(() => {
-    let sumTillInput = 0;
-    for(let i = 1; i <= input; i++) {
-      sumTillInput += i;
-    }
-    return sumTillInput;
-  }, [input]);
+  // let solution = useMemo(() => {
+  //   let sumTillInput = 0;
+  //   for(let i = 1; i <= input; i++) {
+  //     sumTillInput += i;
+  //   }
+  //   return sumTillInput;
+  // }, [input]);
 
 
   // useEffect(() => {
@@ -71,7 +75,7 @@ function App() {
       {/* <button onClick={(e) => setCurrentTodoBtn(e.target.innerText)}>1</button>
       <button onClick={(e) => setCurrentTodoBtn(e.target.innerText)}>2</button>
       <button onClick={(e) => setCurrentTodoBtn(e.target.innerText)}>3</button>
-      <button onClick={(e) => setCurrentTodoBtn(e.target.innerText)}>4</button>
+      <button onClick={(e) => setCurrentTodoBtn(e.target.innerText)}>4</button> */}
       {todos.map((todo, index) => {
         return (
           <div key={index}>
@@ -79,11 +83,11 @@ function App() {
             <p>{todo.description}</p>
           </div>
         )
-      })} */}
+      })}
 
-      <input type="number" onChange={(e) => setInput(e.target.value === "" ? "" : Number(e.target.value))} value={input}/>
+      {/* <input type="number" onChange={(e) => setInput(e.target.value === "" ? "" : Number(e.target.value))} value={input}/>
       <div>Solution: {solution}</div>
-      <button onClick={handleOnClick}>Counter {count}</button>
+      <button onClick={handleOnClick}>Counter {count}</button> */}
     </>
   )
 }
