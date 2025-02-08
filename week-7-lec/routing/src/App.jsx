@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import { CountContext } from './context';
+import { useContext } from 'react';
 // import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Landing from './components/Landing';
 // import Dashboard from './components/Dashboard';
@@ -14,8 +16,9 @@ function App() {
   return (
     <div>
 
-      <Count count={count}/>
-      <Buttons count={count} setCount={setCount}/>
+      <CountContext.Provider value={count}>
+        <Count setCount={setCount}/>
+      </CountContext.Provider>
 
       {/* <BrowserRouter>
         <Header />
@@ -28,11 +31,24 @@ function App() {
   )
 }
 
-function Count({count}) {
-  return <div>{count}</div>
+function Count({setCount}) {
+  return (
+    <div>
+      <CountRerender />
+      <Buttons setCount={setCount}/>
+    </div>
+  )
 }
 
-function Buttons({count, setCount}) {
+function CountRerender() {
+  const count = useContext(CountContext);  
+  return (
+    <div>{count}</div>
+  )
+}
+
+function Buttons({setCount}) {
+  const count = useContext(CountContext);
   return (
     <div>
       <button onClick={
