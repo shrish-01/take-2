@@ -75,6 +75,17 @@ app.get("/interest", (req, res) => {
     });
 });
 
+app.get("/notifications", (req, res) => {
+  let notifications = parseInt(Math.random()*100);
+  let network = parseInt(Math.random()*10);
+  let jobs = parseInt(Math.random()*10);
+  let messages = parseInt(Math.random()*10);
+
+  res.status(200).json({
+    network, jobs, messages, notifications
+  })
+});
+
 app.listen(3001, () => {
     console.log("Server running at 3001");
 });
