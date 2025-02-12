@@ -1,22 +1,21 @@
-import { useRecoilValue } from "recoil"
-import { jobsAtom, meSelector, messagingAtom, networkAtom, notificationsAtom } from "./atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { meSelector, notificationsAtom } from "./atoms";
+import { useEffect } from "react";
+import axios from "axios";
 
 function App() {
 
-  const network = useRecoilValue(networkAtom);
-  const jobs = useRecoilValue(jobsAtom);
-  const notifications = useRecoilValue(notificationsAtom);
-  const messaging = useRecoilValue(messagingAtom);
+  const [notifications, setNotifications] = useRecoilState(notificationsAtom);
   const meSelect = useRecoilValue(meSelector);
 
   return (
     <>
       <button>Home</button>
       
-      <button>My Network ({network >= 100 ? "99+" : network})</button>
-      <button>Jobs ({jobs})</button>
-      <button>Messaging ({notifications})</button>
-      <button>Notifications ({messaging})</button>
+      <button>My Network ({notifications.network >= 100 ? "99+" : notifications.network})</button>
+      <button>Jobs ({notifications.jobs})</button>
+      <button>Messaging ({notifications.messages})</button>
+      <button>Notifications ({notifications.notifications})</button>
 
       <button>Me ({meSelect})</button>
     </>
