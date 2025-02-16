@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -46,10 +47,10 @@ UserSchema.methods.createHash = async function (plainTextPassword) {
   
 // Validating the candidate password with stored hash and hash function
 UserSchema.methods.validatePassword = async function (candidatePassword) {
-return await bcrypt.compare(candidatePassword, this.password_hash);
+    return await bcrypt.compare(candidatePassword, this.password);
 };
 
-const User = mongoose.model("paytm-user", userSchema);
+const User = mongoose.model("paytm-user", UserSchema);
 
 module.exports = {
     User,
