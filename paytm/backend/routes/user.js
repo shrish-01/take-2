@@ -2,7 +2,7 @@ const express = require("express");
 const { validateData } = require("../middlewares/validateData");
 const { userRegistrationSchema, userSignInSchema, userDataUpdateSchema } = require("../zodConfig");
 const { StatusCodes } = require('http-status-codes');
-const { User } = require('../db');
+const { User, BankAccount } = require('../db');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config');
 const { authMiddleware } = require("../middlewares/authMiddleware");
@@ -30,9 +30,15 @@ router.post("/signup", validateData(userRegistrationSchema), async (req, res) =>
     newUser.password = hashedPassword;
     await newUser.save();
 
+    await BankAccount.create({
+        id: newUser._id,
+        balance: 1 + Math.random() * 10000,
+    });
+
     // return the json web token
 
     const token = jwt.sign({
+        userId: newUser._id,
         username: username
     }, JWT_SECRET);
     
@@ -54,6 +60,7 @@ router.post("/signin", validateData(userSignInSchema), async (req, res) => {
         // console.log(password);
         if(await userExists.validatePassword(password)) {
             const token = jwt.sign({
+                userId: userExists._id,
                 username: username,
             }, JWT_SECRET);
 
