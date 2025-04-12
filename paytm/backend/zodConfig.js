@@ -12,7 +12,14 @@ const userSignInSchema = z.object({
     password: z.string(),
 });
 
+const userDataUpdateSchema = z.object({
+    password: z.string().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+});
+
 module.exports = {
     userRegistrationSchema,
     userSignInSchema,
+    userDataUpdateSchema,
 }

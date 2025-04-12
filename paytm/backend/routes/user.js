@@ -1,10 +1,11 @@
 const express = require("express");
 const { validateData } = require("../middlewares/validateData");
-const { userRegistrationSchema, userSignInSchema } = require("../zodConfig");
+const { userRegistrationSchema, userSignInSchema, userDataUpdateSchema } = require("../zodConfig");
 const { StatusCodes } = require('http-status-codes');
 const { User } = require('../db');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config');
+const { authMiddleware } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
@@ -66,6 +67,47 @@ router.post("/signin", validateData(userSignInSchema), async (req, res) => {
             })
         }
     }
+});
+
+router.get("/test", authMiddleware, (req, res) => {
+    return res.json({
+        message: "Test Route"
+    });
+});
+
+router.put("/updateUser", authMiddleware, validateData(userDataUpdateSchema), async (req, res) => {
+    if(req.body == null) {
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({
+            message: "No parameters passed for updation",
+        });
+    }
+    await User.updateOne({
+        _id: req.userId
+    }, req.body);
+});
+
+router.get("/bulk", authMiddleware, async (req, res) => {
+    const filter = req.query.filter || "";
+    const foundUsers = await User.find({
+        $or: [{
+            firstName: {
+                "$regex": filter
+            }
+        }, {
+            lastName: {
+                "$regex": filter
+            }
+        }]
+    });
+
+    res.json({
+        user: foundUsers.map(user => ({
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
+    })
 });
 
 module.exports = router;

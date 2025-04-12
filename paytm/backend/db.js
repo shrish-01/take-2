@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { Schema } = require("zod");
 
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -32,6 +33,18 @@ const UserSchema = new mongoose.Schema({
     },
 });
 
+const BankAccountSchema = new mongoose.Schema({
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    balance: {
+        type: Number,
+        required: true,
+    }
+});
+
 UserSchema.methods.createHash = async function (plainTextPassword) {
 
     // Hashing user's salt and password with 10 iterations,
@@ -51,7 +64,8 @@ UserSchema.methods.validatePassword = async function (candidatePassword) {
 };
 
 const User = mongoose.model("paytm-user", UserSchema);
+const BankAccount = mongoose.model("bank-account", BankAccountSchema);
 
 module.exports = {
-    User,
+    User, BankAccount
 }
